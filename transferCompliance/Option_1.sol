@@ -24,9 +24,7 @@ contract TestTransferV1 is ERC721A, Ownable { // PaperVerification
     bool private transferable = false;
 
     constructor(
-        // address _currency // string memory _baseURI
-    ) ERC721A("Dems", "DEMS") { // address _tokenAddress, 
-        // currency = _currency;
+    ) ERC721A("Dems", "DEMS") {
     }
 
     // requirement for mint
@@ -40,46 +38,13 @@ contract TestTransferV1 is ERC721A, Ownable { // PaperVerification
         _;
     }
 
-    // requirement for price
-    modifier priceCompliant(
-        address _recipient,
-        uint256 _quantity
-    ) {
-        uint256 priceAmount = price * _quantity;
-        require(msg.value >= priceAmount, "Insufficient funds for purchase");
-        IERC20(currency).transferFrom(
-            _recipient,
-            address(this),
-            priceAmount
-        );
-        _;
-    }
-
     function claimTo(
         address _recipient,
         uint256 _quantity
-    ) external payable mintCompliant(_recipient, _quantity) { //priceCompliant(_recipient, _quantity)
+    ) external payable mintCompliant(_recipient, _quantity) {
         amountNFTsperWallet[_recipient] += _quantity;
         _safeMint(_recipient, _quantity);
     }
-
-    function getClaimIneligibilityReason(
-        address _recipient,
-        uint256 _quantity
-    ) public view returns (string memory) {
-        if (
-            totalSupply() + _quantity > MAX_SUPPLY
-        ) {
-            return "Max supply exceeded, contact support";
-        } else if (_quantity > MAX_MINT_AMOUNT) {
-            return "Invalid mint amount, you can only mint 1 token";
-        }
-        else if (amountNFTsperWallet[_recipient] + _quantity > MAX_MINT_AMOUNT) {
-            return "You already minted this NFT!";
-        }
-        return "";
-    }
-
 
     function unclaimedSupply() external view returns (uint256) {
         return MAX_SUPPLY - totalSupply();
