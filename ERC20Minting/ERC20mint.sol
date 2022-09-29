@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.12;
 
-import "@paperxyz/contracts/verification/PaperVerification.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./ERC721A.sol";
 
-contract TestTransferV2 is ERC721A, Ownable { // PaperVerification
+contract TestTransferV2 is ERC721A, Ownable {
 
     using Strings for uint;
 
